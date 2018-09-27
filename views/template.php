@@ -242,7 +242,7 @@
                             <div class="widget">
                                 <h1><?php $this->lang->get('FEATUREDPRODUCTS'); ?></h1>
                                 <div class="widget_body">
-                                    <?php $this->loadView('widget_item', array('list'=>$viewData['widget_featured1'])); ?>
+                                    <?php $this->loadView('widget_item', array('list' => $viewData['widget_featured1'])); ?>
                                 </div>
                             </div>
                         </aside>
@@ -258,7 +258,7 @@
                         <div class="widget">
                             <h1><?php $this->lang->get('FEATUREDPRODUCTS'); ?></h1>
                             <div class="widget_body">
-                                <?php $this->loadView('widget_item', array('list'=>$viewData['widget_featured2'])); ?>
+                                <?php $this->loadView('widget_item', array('list' => $viewData['widget_featured2'])); ?>
                             </div>
                         </div>
                     </div>
@@ -267,8 +267,8 @@
                             <h1><?php $this->lang->get('ONSALEPRODUCTS'); ?></h1>
                             <div class="widget_body">
 
-                                <?php $this->loadView('widget_item', array('list'=>$viewData['widget_sale'])); ?>
-                                
+                                <?php $this->loadView('widget_item', array('list' => $viewData['widget_sale'])); ?>
+
                             </div>
                         </div>
                     </div>
@@ -276,7 +276,7 @@
                         <div class="widget">
                             <h1><?php $this->lang->get('TOPRATEDPRODUCTS'); ?></h1>
                             <div class="widget_body">
-                                <?php $this->loadView('widget_item', array('list'=>$viewData['widget_toprated'])); ?>
+                                <?php $this->loadView('widget_item', array('list' => $viewData['widget_toprated'])); ?>
                             </div>
                         </div>
                     </div>
@@ -286,9 +286,12 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-xs-12 col-sm-8 col-sm-offset-2 no-padding">
-                            <form method="POST">
-                                <input class="subemail" name="email" placeholder="<?php $this->lang->get('SUBSCRIBETEXT'); ?>">
-                                <input type="submit" value="<?php $this->lang->get('SUBSCRIBEBUTTON'); ?>" />
+
+                            <form action="https://thevoid.us19.list-manage.com/subscribe/post?u=2efba2180bfd0630c10a53a45&amp;id=dff31c3ad0" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+
+                                <input type="email" value="" name="EMAIL" class="subemail required email" id="mce-EMAIL" placeholder="<?php $this->lang->get('SUBSCRIBETEXT'); ?>">
+                                <input type="hidden" name="b_2efba2180bfd0630c10a53a45_dff31c3ad0" tabindex="-1" value="">
+                                <input type="submit" value="<?php $this->lang->get('SUBSCRIBEBUTTON'); ?>" name="subscribe" id="mc-embedded-subscribe" class="button">
                             </form>
                         </div>
                     </div>
