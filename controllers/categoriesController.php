@@ -1,35 +1,39 @@
 <?php
+
 class categoriesController extends controller {
 
-	private $user;
+    private $user;
 
     public function __construct() {
         parent::__construct();
     }
 
     public function index() {
-        header("Location: ".BASE_URL);
+        header("Location: " . BASE_URL);
     }
 
     public function enter($id) {
-        $dados = array();
-
+        $store = new Store();
         $products = new Products();
         $categories = new Categories();
+        $f = new Filters;
+
+        $dados = $store->getTemplateData();
+
         $dados['category_name'] = $categories->getCategoryName($id);
 
-        if(!empty($dados['category_name'])) {
+        if (!empty($dados['category_name'])) {
             $currentPage = 1;
             $offset = 0;
             $limit = 3;
 
-            if(!empty($_GET['p'])) {
+            if (!empty($_GET['p'])) {
                 $currentPage = $_GET['p'];
             }
 
             $offset = ($currentPage * $limit) - $limit;
 
-            $filters = array('category'=>$id);
+            $filters = array('category' => $id);
 
             $dados['category_filter'] = $categories->getCategoryTree($id);
 
@@ -39,33 +43,18 @@ class categoriesController extends controller {
             $dados['currentPage'] = $currentPage;
 
             $dados['id_category'] = $id;
+            $dados['filters'] = $f->getFilters($filters);
+            $dados['filters_selected'] = $filters;
+
+            $dados['searchTerm'] = '';
+            $dados['category'] = '';
 
             $dados['categories'] = $categories->getList();
+            $dados['sidebar'] = true;
             $this->loadTemplate('categories', $dados);
         } else {
-            header("Location: ".BASE_URL);
+            header("Location: " . BASE_URL);
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

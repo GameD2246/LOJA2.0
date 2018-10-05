@@ -163,15 +163,15 @@ class Products extends model {
 
     public function getList($offset = 0, $limit = 3, $filters = array(), $random = false) {
         $array = array();
-        
+
         $orderBySQL = '';
-        if($random == true){
+        if ($random == true) {
             $orderBySQL = "ORDER BY RAND()";
         }
-        
-    if(!empty($filters['toprated'])){
-        $orderBySQL = "ORDER BY rating DESC";
-    }
+
+        if (!empty($filters['toprated'])) {
+            $orderBySQL = "ORDER BY rating DESC";
+        }
 
         $where = $this->buildWhere($filters);
 
@@ -182,7 +182,7 @@ class Products extends model {
 		FROM
 		products
 		WHERE " . implode(' AND ', $where) . "
-                    ".$orderBySQL."
+                    " . $orderBySQL . "
 		LIMIT $offset, $limit";
         $sql = $this->db->prepare($sql);
 
@@ -255,11 +255,11 @@ class Products extends model {
         if (!empty($filters['sale'])) {
             $where[] = "sale = '1'";
         }
-        
+
         if (!empty($filters['featured'])) {
             $where[] = "featured = '1'";
         }
-        
+
         if (!empty($filters['options'])) {
             $where[] = "id IN (select id_product from products_options where products_options.p_value IN ('" . implode("','", $filters['options']) . "'))";
         }
@@ -299,4 +299,105 @@ class Products extends model {
         }
     }
 
+    public function getProductInfo($id) {
+        $array = array();
+
+        if (!empty($id)) {
+            $sql = "SELECT
+                    *,
+                    ( select brands.name from brands where brands.id = products.id_brand ) as brand_name
+                    FROM products WHERE id =:id";
+            $sql = $this->db->prepare($sql);
+            $sql->bindValue(":id", $id);
+            $sql->execute();
+
+            if ($sql->rowCount() > 0) {
+
+                $array = $sql->fetch();
+            }
+        }
+        return $array;
+    }
+
+    public function getOptionsByProductId($id) {
+        $options = array();
+
+        //Etapa 1 - pegar os nomes das optções.
+        $sql = "SELECT options FROM products WHERE id = :id";
+        $sql = $this->db->prepare($sql);
+        $sql->bindValue(":id", $id);
+        $sql->execute();
+
+        if ($sql->rowCount() > 0) {
+            $options = $sql->fetch();
+            $options = $options['options'];
+
+            if (!empty($options)) {
+                $sql = "SELECT * FROM options WHERE id IN (" . $options . ")";
+                $sql = $this->db->query($sql);
+                $options = $sql->fetchALL();
+            }
+
+            // Etapa 2 - Pegar os valores das opções
+            $sql = "SELECT * FROM products_options WHERE id_product = :id";
+            $sql = $this->db->prepare($sql);
+            $sql->bindValue(":id", $id);
+            $sql->execute();
+            $options_values = array();
+            if ($sql->rowCount() > 0) {
+                foreach ($sql->fetchALL() as $op) {
+
+                    $options_values[$op['id_option']] = $op['p_value'];
+                }
+            }
+            
+            // Etapa 3 - Juntar tudo em um único array.
+            foreach($options as $ok => $op){
+                if(isset($options_values[$op['id']])){
+                    $options[$ok]['value'] = $options_values[$op['id']];
+                } else {
+                    $options[$ok]['value'] = '';
+                }
+                
+            }
+            
+        }
+
+
+
+        return $options;
+    }
+    
+    public function getRates($id, $qt){
+        $array = array();
+        
+        $rates = new Rates();
+        $array = $rates->getRates($id, $qt);
+        
+        
+        return $array;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }

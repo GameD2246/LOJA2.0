@@ -9,12 +9,12 @@ class buscaController extends controller {
     }
 
     public function index() {
-        $dados = array();
-
+        $store = new Store();
         $products = new Products();
         $categories = new Categories();
         $f = new Filters();
-
+        
+        $dados = $store->getTemplateData();
         if (!empty($_GET['s'])) {
 
             $searchTerm = $_GET['s'];
@@ -50,6 +50,7 @@ class buscaController extends controller {
             
             $dados['searchTerm'] = $searchTerm;
             $dados['category'] = $category;
+            $dados['sidebar'] = true;
             
 
             $this->loadTemplate('busca', $dados);
