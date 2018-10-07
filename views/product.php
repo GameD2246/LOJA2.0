@@ -30,7 +30,9 @@
         <br>
         Por: <span class="original_price">R$ <?php echo number_format($product_info['price'], 2); ?></span>
 
-        <form method="POST" class="addtocartform">
+        <form method="POST" class="addtocartform" action="<?php echo BASE_URL; ?>/cart/add">
+            <input type="hidden" name="id_product" value="<?php echo $product_info['id']; ?>" >
+            <input type="hidden" name="qt_product" value="1" >
             <button data-action="decrease">-</button>
             <input type="text" name="qt" value="1" class="addtocart_qt" disabled >
             <button data-action="increase">+</button>
@@ -51,7 +53,7 @@
         <?php foreach ($product_rates as $rate): ?>
             <strong><?php echo $rate['user_name']; ?></strong> - 
             <?php for ($q = 0; $q < intval($rate['points']); $q++): ?>
-            <img src="<?php echo BASE_URL; ?>assets/images/star.png" border="0" height="15">
+                <img src="<?php echo BASE_URL; ?>assets/images/star.png" border="0" height="15">
             <?php endfor; ?>
             <br>
             "<?php echo $rate['comment']; ?>"
