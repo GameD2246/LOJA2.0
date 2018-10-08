@@ -1,6 +1,23 @@
 <?php
-
 class Products extends model {
+
+    public function getInfo($id) {
+        $array = array();
+        
+        $sql = "SELECT name, price FROM products WHERE id = :id";
+        $sql = $this->db->prepare($sql);
+        $sql->bindValue(":id", $id);
+        $sql->execute();
+        
+        if($sql->rowCount() > 0) {
+            
+            $array = $sql->fetch();
+            $images = current($this->getImagesByProductId($id));
+            $array['image'] = $images['url'];
+        }
+        
+        return $array;
+    }
 
     public function getAvailableOptions($filters = array()) {
         $groups = array();
@@ -350,54 +367,30 @@ class Products extends model {
                     $options_values[$op['id_option']] = $op['p_value'];
                 }
             }
-            
+
             // Etapa 3 - Juntar tudo em um único array.
-            foreach($options as $ok => $op){
-                if(isset($options_values[$op['id']])){
+            foreach ($options as $ok => $op) {
+                if (isset($options_values[$op['id']])) {
                     $options[$ok]['value'] = $options_values[$op['id']];
                 } else {
                     $options[$ok]['value'] = '';
                 }
-                
             }
-            
         }
 
 
 
         return $options;
     }
-    
-    public function getRates($id, $qt){
+
+    public function getRates($id, $qt) {
         $array = array();
-        
+
         $rates = new Rates();
         $array = $rates->getRates($id, $qt);
-        
-        
+
+
         return $array;
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
 }

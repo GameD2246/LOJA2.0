@@ -11,12 +11,29 @@ class cartController extends controller {
     public function index() {
         $store = new Store();
         $products = new Products();
+        $cart = new Cart();
+        
+        if(!isset($_SESSION['cart']) || (isset($_SESSION['cart']) && count($_SESSION['cart']) == 0)){
+            header("Location: ".BASE_URL);
+            exit;
+        }
 
         $dados = $store->getTemplateData();
-
+        
+        $dados['list'] = $cart->getList();
 
         $this->loadTemplate('cart', $dados);
     }
+    
+    public function del($id) {
+        if(!empty($id)){
+            unset($_SESSION['cart'][$id]);
+        }
+        
+        header("Location:".BASE_URL."cart");
+        exit;
+    }
+
 
     public function add() {
         if (!empty($_POST['id_product'])) {
